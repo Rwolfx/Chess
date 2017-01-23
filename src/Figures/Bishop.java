@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.HashSet;
 
 import GUI.Board;
+import GUI.Settings;
 import javafx.scene.image.Image;
 
 public class Bishop extends Figure{
@@ -20,7 +21,57 @@ public class Bishop extends Figure{
 	
 	@Override
 	public void generateLegalMove(Board board) {
-		
+		int row = this.getPosition().getLocationY();
+	    int column = this.getPosition().getLocationX();
+	    legalMoves = new HashSet<Point>();
+	    //down positive
+	    for (int j = column + 1, i = row + 1; j < Settings.SIZE && i < Settings.SIZE; j++, i++) {
+	    	Figure figure = board.getFigureByLocation(i, j);
+	        if (figure == null) {
+	            legalMoves.add(new Point(i,j));
+	        } else if (isOpponent(figure)) {
+	            legalMoves.add(new Point(i,j));
+	            break;
+	        } else {
+	            break;
+	        }
+	    }
+	    //up positive
+	    for (int j = column - 1, i = row + 1; j > -1 && i < Settings.SIZE; j--, i++) {
+	    	Figure figure = board.getFigureByLocation(i, j);
+	        if (figure == null) {
+	            legalMoves.add(new Point(i,j));
+	        } else if (isOpponent(figure)) {
+	            legalMoves.add(new Point(i,j));
+	            break;
+	        } else {
+	            break;
+	        }
+	    }
+	    //up negative
+	    for (int j = column - 1, i = row - 1; j > -1 && i > -1; j--, i--) {
+	        Figure figure = board.getFigureByLocation(i, j);
+	        if (figure == null) {
+	            legalMoves.add(new Point(i,j));
+	        } else if (isOpponent(figure)) {
+	            legalMoves.add(new Point(i,j));
+	            break;
+	        } else {
+	            break;
+	        }
+	    }
+	    //down negative
+	    for (int j = column + 1, i = row - 1; j < Settings.SIZE && i > -1; j++, i--) {
+	    	Figure figure = board.getFigureByLocation(i, j);
+	        if (figure == null) {
+	            legalMoves.add(new Point(i,j));
+	        } else if (isOpponent(figure)) {
+	            legalMoves.add(new Point(i,j));
+	            break;
+	        } else {
+	            break;
+	        }
+	    }
 	}
 
 

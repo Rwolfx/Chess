@@ -61,7 +61,7 @@ public class Board {
 		figures.add(new Pawn(WHITE,3,6));
 		figures.add(new Pawn(WHITE,4,6));
 		figures.add(new Pawn(WHITE,5,6));
-		figures.add(new Pawn(WHITE,6,6));
+		//figures.add(new Pawn(WHITE,6,6));
 		figures.add(new Pawn(WHITE,7,6));
 	}
 	
