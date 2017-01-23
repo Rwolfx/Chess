@@ -26,11 +26,11 @@ public class Bishop extends Figure{
 	    legalMoves = new HashSet<Point>();
 	    //down positive
 	    for (int j = column + 1, i = row + 1; j < Settings.SIZE && i < Settings.SIZE; j++, i++) {
-	    	Figure figure = board.getFigureByLocation(i, j);
+	    	Figure figure = board.getFigureByLocation(j,i);
 	        if (figure == null) {
-	            legalMoves.add(new Point(i,j));
+	            legalMoves.add(new Point(j,i));
 	        } else if (isOpponent(figure)) {
-	            legalMoves.add(new Point(i,j));
+	            legalMoves.add(new Point(j,i));
 	            break;
 	        } else {
 	            break;
@@ -40,9 +40,9 @@ public class Bishop extends Figure{
 	    for (int j = column - 1, i = row + 1; j > -1 && i < Settings.SIZE; j--, i++) {
 	    	Figure figure = board.getFigureByLocation(i, j);
 	        if (figure == null) {
-	            legalMoves.add(new Point(i,j));
+	            legalMoves.add(new Point(j,i));
 	        } else if (isOpponent(figure)) {
-	            legalMoves.add(new Point(i,j));
+	            legalMoves.add(new Point(j,i));
 	            break;
 	        } else {
 	            break;
@@ -50,11 +50,11 @@ public class Bishop extends Figure{
 	    }
 	    //up negative
 	    for (int j = column - 1, i = row - 1; j > -1 && i > -1; j--, i--) {
-	        Figure figure = board.getFigureByLocation(i, j);
+	    	Figure figure = board.getFigureByLocation(j,i);
 	        if (figure == null) {
-	            legalMoves.add(new Point(i,j));
+	            legalMoves.add(new Point(j,i));
 	        } else if (isOpponent(figure)) {
-	            legalMoves.add(new Point(i,j));
+	            legalMoves.add(new Point(j,i));
 	            break;
 	        } else {
 	            break;
@@ -62,11 +62,11 @@ public class Bishop extends Figure{
 	    }
 	    //down negative
 	    for (int j = column + 1, i = row - 1; j < Settings.SIZE && i > -1; j++, i--) {
-	    	Figure figure = board.getFigureByLocation(i, j);
+	    	Figure figure = board.getFigureByLocation(j,i);
 	        if (figure == null) {
-	            legalMoves.add(new Point(i,j));
+	            legalMoves.add(new Point(j,i));
 	        } else if (isOpponent(figure)) {
-	            legalMoves.add(new Point(i,j));
+	            legalMoves.add(new Point(j,i));
 	            break;
 	        } else {
 	            break;

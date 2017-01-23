@@ -26,11 +26,11 @@ public class Rook extends Figure {
 	    legalMoves = new HashSet<Point>();
 		//moves UP
 	    for (int i = row + 1; i < Settings.SIZE; i++) {
-	        Figure figure = board.getFigureByLocation(i, column);
+	        Figure figure = board.getFigureByLocation(column,i);
 	        if (figure == null ) {
-	            legalMoves.add(new Point(i,column));
+	            legalMoves.add(new Point(column,i));
 	        } else if (isOpponent(figure)) {
-	            legalMoves.add(new Point(i,column));
+	            legalMoves.add(new Point(column,i));
 	            break;
 	        } else {
 	            break;
@@ -38,11 +38,11 @@ public class Rook extends Figure {
 	    }
 	    //moves down
 	    for (int i = row - 1; i > -1; i--) {
-	    	Figure figure = board.getFigureByLocation(i, column);
-	        if (figure == null) {
-	            legalMoves.add(new Point(i,column));
+	    	Figure figure = board.getFigureByLocation(column,i);
+	        if (figure == null ) {
+	            legalMoves.add(new Point(column,i));
 	        } else if (isOpponent(figure)) {
-	            legalMoves.add(new Point(i,column));
+	            legalMoves.add(new Point(column,i));
 	            break;
 	        } else {
 	            break;
@@ -50,11 +50,11 @@ public class Rook extends Figure {
 	    }
 	    //moves right
 	    for (int i = column + 1; i < Settings.SIZE; i++) {
-	        Figure figure = board.getFigureByLocation(row, i);
+	        Figure figure = board.getFigureByLocation(i,row);
 	        if (figure == null) {
-	            legalMoves.add(new Point(row,i));
+	            legalMoves.add(new Point(i,row));
 	        } else if (isOpponent(figure)) {
-	            legalMoves.add(new Point(row,i));
+	            legalMoves.add(new Point(i,row));
 	            break;
 	        } else {
 	            break;
@@ -62,11 +62,11 @@ public class Rook extends Figure {
 	    }
 	    //moves left
 	    for (int i = column - 1; i > -1; i--) {
-	    	Figure figure = board.getFigureByLocation(row, i);
-	    	if (figure == null) {
-	            legalMoves.add(new Point(row,i));
+	    	Figure figure = board.getFigureByLocation(i,row);
+	        if (figure == null) {
+	            legalMoves.add(new Point(i,row));
 	        } else if (isOpponent(figure)) {
-	            legalMoves.add(new Point(row,i));
+	            legalMoves.add(new Point(i,row));
 	            break;
 	        } else {
 	            break;
