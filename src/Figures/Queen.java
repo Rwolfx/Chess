@@ -20,7 +20,15 @@ public class Queen extends Figure {
 
 	@Override
 	public void generateLegalMove(Board board) {
-		
+		legalMoves = new HashSet<Point>();
+		Figure fakeRook = new Rook(this.getColor(), this.getPosition().getLocationX(), this.getPosition().getLocationY());
+		Figure fakeBishop = new Bishop(this.getColor(), this.getPosition().getLocationX(), this.getPosition().getLocationY());
+		fakeRook.generateLegalMove(board);
+		legalMoves.addAll(fakeRook.getLegalMoves());
+		fakeBishop.generateLegalMove(board);
+		legalMoves.addAll(fakeBishop.getLegalMoves());
+		fakeBishop = null;
+		fakeRook = null;
 	}
 
 }

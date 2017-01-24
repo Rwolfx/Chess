@@ -55,6 +55,10 @@ public abstract class Figure {
 		this.alive = false;
 	}
 	
+	public HashSet<Point> getLegalMoves(){
+		return this.legalMoves;
+	}
+	
 	
 }
 
