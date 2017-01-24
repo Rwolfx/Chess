@@ -38,7 +38,7 @@ public class Bishop extends Figure{
 	    }
 	    //up positive
 	    for (int j = column - 1, i = row + 1; j > -1 && i < Settings.SIZE; j--, i++) {
-	    	Figure figure = board.getFigureByLocation(i, j);
+	    	Figure figure = board.getFigureByLocation(j, i);
 	        if (figure == null) {
 	            legalMoves.add(new Point(j,i));
 	        } else if (isOpponent(figure)) {
