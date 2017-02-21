@@ -5,12 +5,13 @@ import java.util.ArrayList;
 
 import Figures.FigureColour;
 
-public class Move {
+public class MoveState {
+	
 	
 	private ArrayList<Point[]> moveList;
 	private FigureColour currMove;
 	
-	public Move(){
+	public MoveState(){
 		moveList = new ArrayList<Point[]>();
 		currMove = FigureColour.WHITE;
 	}
@@ -30,5 +31,10 @@ public class Move {
 	
 	public FigureColour getColour(){
 		return currMove;
+	}
+	
+	public void changeColour(){
+		if(currMove == FigureColour.WHITE) currMove = FigureColour.BLACK;
+		else currMove = FigureColour.WHITE;
 	}
 }
