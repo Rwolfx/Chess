@@ -8,6 +8,8 @@ import Engine.MoveState;
 import Figures.Figure;
 import Figures.FigureColour;
 import Figures.King;
+import Figures.Pawn;
+import Figures.Queen;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -89,6 +91,29 @@ class TileHandler implements EventHandler<MouseEvent> {
 						if (targetFigure != null)
 							targetFigure.ressurect();
 					} else {
+						if(activeFigure.getClass() == Pawn.class){
+							switch(activeFigure.getColor()){
+							case WHITE :
+								if(activeFigure.getPosition().getLocationY() == 0) {
+									figures.add(new Queen(FigureColour.WHITE,
+											activeFigure.getPosition().getLocationX(),
+											activeFigure.getPosition().getLocationY()));
+									board.getFigures().remove(activeFigure);
+								}
+								
+								break;
+							case BLACK : 
+								if(activeFigure.getPosition().getLocationY() ==7) {
+									figures.add(new Queen(FigureColour.BLACK,
+											activeFigure.getPosition().getLocationX(),
+											activeFigure.getPosition().getLocationY()));
+									board.getFigures().remove(activeFigure);
+								}
+								
+								break;
+							}
+							
+						}
 						activeFigure.moved();
 						moveState.changeColour();
 						moveState.addMove(new Point(activeFigure.getPosition().getLocationX(),
@@ -127,7 +152,7 @@ class TileHandler implements EventHandler<MouseEvent> {
 		gc.fillRect(blockX, blockY - Settings.TEXT_HEIGHT, blockX, blockY);
 		gc.setFill(Color.BLACK);
 		gc.fillText("Currently selected : " + chessSymb + "" + (activeFigure.getPosition().getLocationY() + 1)
-				+ activeFigure.getClass().toString(), blockX, blockY);
+				+ " : " +  activeFigure.toString(), blockX, blockY);
 	}
 
 	private void updateLegalMoves() {

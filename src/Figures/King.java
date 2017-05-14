@@ -89,5 +89,11 @@ public class King extends Figure {
 	public boolean hasCastled(){
 		return this.castled;
 	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "King";
+	}
 
 }

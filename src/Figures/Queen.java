@@ -31,4 +31,9 @@ public class Queen extends Figure {
 		fakeRook = null;
 	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Queen";
+	}
 }

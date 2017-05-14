@@ -50,6 +50,11 @@ public class Pawn extends Figure{
 		}
 	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Pawn";
+	}
 	
 	
 

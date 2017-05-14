@@ -75,6 +75,10 @@ public class Rook extends Figure {
 	}
 		
 
-
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Rook";
+	}
 	
 }

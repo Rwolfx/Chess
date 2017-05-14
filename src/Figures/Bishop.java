@@ -73,6 +73,11 @@ public class Bishop extends Figure{
 	        }
 	    }
 	}
-
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Bishop";
+	}
 
 }
