@@ -185,8 +185,11 @@ class TileHandler implements EventHandler<MouseEvent> {
 						int prevLocationX = figure.getPosition().getLocationX();
 						int prevLocationY = figure.getPosition().getLocationY();
 						figure.getPosition().setLocation(point.x, point.y);
+						Figure targetFigure = board.getFigureByLocation(point.x, point.y);
+						if(targetFigure != null) targetFigure.die();
 						if (!isChecked())
 							isMated = false;
+						if(targetFigure != null) targetFigure.ressurect();
 						figure.getPosition().setLocation(prevLocationX, prevLocationY);
 					}
 				}
