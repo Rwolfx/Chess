@@ -105,7 +105,7 @@ public class Board {
 		}
 	}
 	
-	private boolean inBounds(Point p){
+	public static boolean inBounds(Point p){
 		return p.x >= Settings.ZERO_VALUE && p.y >= Settings.ZERO_VALUE && p.x < Settings.SIZE && p.y < Settings.SIZE;
 	}
 	public void updateProtected(HashSet<Point> whiteProtected, HashSet<Point> blackProtected ){
