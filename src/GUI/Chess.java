@@ -1,9 +1,12 @@
 package GUI;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import Engine.MoveState;
 import Figures.Figure;
+import Figures.FigureColour;
+import Figures.King;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -45,6 +48,8 @@ class TileHandler implements EventHandler<MouseEvent>{
 	private GraphicsContext gc;
 	private int blockX = Settings.MARGIN_LEFT + Settings.SIDE + Settings.MARGIN_RIGHT;
 	private int blockY = Settings.TEXT_MARGIN_TOP;
+	private int checkBlockX = Settings.MARGIN_LEFT + Settings.SIDE + Settings.MARGIN_RIGHT;
+	private int checkBlockY = 2 * Settings.TEXT_MARGIN_TOP;
     MoveState moveState;
 	
 	public TileHandler(Board board, GraphicsContext gc){
@@ -58,6 +63,7 @@ class TileHandler implements EventHandler<MouseEvent>{
 	}
 	@Override
 	public void handle(MouseEvent event) {
+		updateLegalMoves();
 		int currTileX = (int)(event.getX()-Settings.MARGIN_LEFT)/(Settings.GRID_VALUE);
         int currTileY = (int)(event.getY()-Settings.MARGIN_TOP)/(Settings.GRID_VALUE);
         Figure selectedFigure = board.getFigureByLocation(currTileX, currTileY);
@@ -67,15 +73,27 @@ class TileHandler implements EventHandler<MouseEvent>{
     				activeFigure = selectedFigure;
     		}else{
     			activeFigure.generateLegalMove(board);
-    			if(activeFigure.isLegal(currTileX, currTileY)){
+    			if(activeFigure.isLegal(currTileX, currTileY, board)){
     				Figure targetFigure = board.getFigureByLocation(currTileX, currTileY);
-    				if(targetFigure != null && targetFigure.isAlive() && targetFigure.getColor() != activeFigure.getColor()) {
+    				if(targetFigure != null && targetFigure.isAlive() &&
+    						targetFigure.getColor() != activeFigure.getColor()) {
     					targetFigure.die();
     				}
-    				moveState.addMove(new Point(activeFigure.getPosition().getLocationX(), activeFigure.getPosition().getLocationY()),
-    						new Point(currTileX,currTileY));
+    				int prevLocationX = activeFigure.getPosition().getLocationX();
+    				int prevLocationY = activeFigure.getPosition().getLocationY();
 	    			activeFigure.getPosition().setLocation(currTileX, currTileY);
-	    			moveState.changeColour();
+	    			if(isChecked()){
+	    				activeFigure.getPosition().setLocation(prevLocationX, prevLocationY);
+	    			}else{
+		    			activeFigure.moved();
+		    			moveState.changeColour();
+		    			moveState.addMove(new Point(activeFigure.getPosition().getLocationX(), 
+    							activeFigure.getPosition().getLocationY()),
+    								new Point(currTileX,currTileY));
+		    			if(isChecked()) displayCheck();
+		    			else unCheck();
+		    			
+	    			}
     			}
     			activeFigure = null;
     		}
@@ -90,17 +108,65 @@ class TileHandler implements EventHandler<MouseEvent>{
 	}
 	private void displayNotSelected() {
 		gc.setFill(Color.WHITE);
-		gc.fillRect(blockX, blockY-Settings.TEXT_HEIGHT,Settings.WIDTH - blockX , Settings.HEIGHT-blockY);
+		gc.fillRect(blockX, blockY-Settings.TEXT_HEIGHT,
+				Settings.WIDTH - blockX , 
+					Settings.HEIGHT-blockY);
 		gc.setFill(Color.BLACK);
 		gc.fillText("Figure is not selected", blockX, blockY);
 	}
 	private void displaySelected() {
 		char chessSymb = (char) ('a' + activeFigure.getPosition().getLocationX());
 		gc.setFill(Color.WHITE);
-		gc.fillRect(blockX, blockY - Settings.TEXT_HEIGHT,Settings.WIDTH - blockX , Settings.HEIGHT-blockY);
+		gc.fillRect(blockX, blockY - Settings.TEXT_HEIGHT,
+						Settings.WIDTH - blockX ,
+							Settings.HEIGHT-blockY);
 		gc.setFill(Color.BLACK);
-		gc.fillText("Currently selected : " + chessSymb + "" + (activeFigure.getPosition().getLocationY()+1) + activeFigure.getClass().toString(), blockX, blockY);
+		gc.fillText("Currently selected : " + chessSymb + "" + 
+						(activeFigure.getPosition().getLocationY()+1) + 
+								activeFigure.getClass().toString(), blockX, blockY);
 	}
 	
-
+	private void updateLegalMoves(){
+		HashSet<Point> whiteLegal = new HashSet<Point>();
+		HashSet<Point> blackLegal = new HashSet<Point>();
+		for(Figure figure : board.getFigures()) {
+			if(figure != null && figure.isAlive() && figure.getColor() == FigureColour.WHITE ) {
+				figure.generateLegalMove(board);
+				whiteLegal.addAll(figure.getLegalMoves() == null? new ArrayList<Point>() : figure.getLegalMoves());
+			}
+		}
+		for(Figure figure : board.getFigures()) {
+			if(figure != null && figure.isAlive() && figure.getColor() == FigureColour.BLACK){
+				figure.generateLegalMove(board);
+				blackLegal.addAll(figure.getLegalMoves() == null? new ArrayList<Point>() : figure.getLegalMoves());
+			}
+		}
+		board.updateProtected(whiteLegal,blackLegal);
+	}
+	
+	public boolean isChecked(){
+		Figure kingPiece = null;
+		for(Figure figure : board.getFigures()){
+			if(figure.getClass() == King.class && figure.getColor() == this.moveState.getColour()) kingPiece = figure;
+		}
+		return (board.isProtectedBy(kingPiece.getPosition().getLocationX(),
+					kingPiece.getPosition().getLocationY(),
+						kingPiece.getColor().opposite()));
+	}
+	
+	private void displayCheck() {
+		gc.setFill(Color.WHITE);
+		gc.fillRect(checkBlockX, checkBlockY-Settings.TEXT_HEIGHT,
+				Settings.WIDTH - checkBlockX , 
+					Settings.HEIGHT-checkBlockY);
+		gc.setFill(Color.BLACK);
+		gc.fillText("CHECK!", checkBlockX,checkBlockY);
+	}
+	
+	private void unCheck(){
+		gc.setFill(Color.WHITE);
+		gc.fillRect(checkBlockX, checkBlockY-Settings.TEXT_HEIGHT,
+				Settings.WIDTH - checkBlockX , 
+					Settings.HEIGHT-checkBlockY);
+	}
 }

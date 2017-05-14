@@ -12,6 +12,7 @@ public abstract class Settings {
 	
 	public final static int SIDE = 720;
 	public final static int SIZE = 8;
+	public final static int ZERO_VALUE = 0;
 	
 	public static final int GRID_VALUE = SIDE/SIZE;  
 	

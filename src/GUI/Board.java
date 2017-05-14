@@ -1,8 +1,12 @@
 package GUI;
-import java.awt.GraphicsDevice.WindowTranslucency;
-import java.io.File;
+import static Figures.FigureColour.BLACK;
+import static Figures.FigureColour.WHITE;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import Figures.Bishop;
 import Figures.Figure;
@@ -14,21 +18,24 @@ import Figures.Queen;
 import Figures.Rook;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import static Figures.FigureColour.*;
 
 public class Board {
 	private ArrayList<Figure> figures;
 	private final int COLUMNS = 8;
 	private final int RAWS = 8;
 	private Image boardImg;	
+	private Tile[][] tiles;
 	
 	public Board(){
+		tiles = new Tile[RAWS][COLUMNS];
+		initTiles(tiles);
 		figures = new ArrayList<Figure>();
-		fillfigures();
+		fillFigures();
 		boardImg = new Image(getClass().getResourceAsStream("/Resource/Chess_Board.png"));
+		
 	}
 	
-	private void fillfigures(){
+	private void fillFigures(){
 		// white side
 		figures.add(new Rook(BLACK,0,0));
 		figures.add(new Knight(BLACK,1,0));
@@ -81,6 +88,44 @@ public class Board {
 	}
 	public ArrayList<Figure> getFigures(){
 		return figures;
+	}
+	
+	private void initTiles(Tile[][] tiles){
+		for(int i = 0 ;i < tiles.length;i++){
+			for(int j = 0; j < tiles[0].length ;j++){
+				tiles[i][j] = new Tile(i,j);
+			}
+		}
+	}
+	
+	public boolean isProtectedBy(int locationX, int locationY, FigureColour colour){
+		switch(colour){
+		case BLACK : return tiles[locationX][locationY].isBlackProtected();
+		default : return tiles[locationX][locationY].isWhiteProtected();
+		}
+	}
+	
+	private boolean inBounds(Point p){
+		return p.x >= Settings.ZERO_VALUE && p.y >= Settings.ZERO_VALUE && p.x < Settings.SIZE && p.y < Settings.SIZE;
+	}
+	public void updateProtected(HashSet<Point> whiteProtected, HashSet<Point> blackProtected ){
+		tiles = new Tile[RAWS][COLUMNS];
+		initTiles(tiles);
+		for(Point whitePoint : whiteProtected){
+			if(inBounds(whitePoint))
+				tiles[whitePoint.x][whitePoint.y].protectByWhite();
+		}
+		for(Point blackPoint : blackProtected){
+			if(inBounds(blackPoint))
+				tiles[blackPoint.x][blackPoint.y].protectByBlack();
+		}
+	}
+	public <T extends Figure> List<T> getFiguresByClass(Class<T> figureClass){
+		return figures.stream()
+				.filter(figure -> figure.getClass() == figureClass)
+				.map(figure -> (T)figure)
+				.collect(Collectors.toList());
+		
 	}
 	
 	

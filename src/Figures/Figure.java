@@ -1,6 +1,7 @@
 package Figures;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import GUI.Board;
@@ -11,15 +12,24 @@ import javafx.scene.image.Image;
 public abstract class Figure {
 	
 	private boolean alive;
-	private FigureColour colour;
+	protected FigureColour colour;
 	protected Image img;
 	protected HashSet<Point> legalMoves;
 	protected FigurePosition position;
+	protected boolean moved;
 	
 	public Figure(FigureColour colour,int x, int y){
+		moved = false;
 		this.colour = colour;
 		position = new FigurePosition(x,y);
 		alive = true;
+	}
+	
+	public boolean hasMoved(){
+		return this.moved;
+	}
+	public void moved(){
+		this.moved = true;
 	}
 	
 	public void draw(GraphicsContext gc){
@@ -39,7 +49,7 @@ public abstract class Figure {
 		return alive;
 	}
 	
-	public boolean isLegal(int x, int y){
+	public boolean isLegal(int x, int y,Board board){
 		if(legalMoves.contains(new Point(x,y))) return true;
 		else return false;
 	}
@@ -58,7 +68,6 @@ public abstract class Figure {
 	public HashSet<Point> getLegalMoves(){
 		return this.legalMoves;
 	}
-	
 	
 }
 
